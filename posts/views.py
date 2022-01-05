@@ -23,13 +23,23 @@ def post_create(request):
     return render(request, 'posts/post_form.html', {'form': post_form})
 
 def post_update(request, post_id):
-    post = Post.object.get(id=post_id)
+    post = Post.objects.get(id=post_id)
     if request.method == 'POST':
         post_form = PostForm(request.POST, instance=post)
         if post_form.is_valid():
             post_form.save()
-            return redirect('post-detail', post_form.id)
+            return redirect('post-detail', post.id)
     else:
         post_form = PostForm(instance=post)
     return render(request, 'posts/post_form.html', {'form': post_form})
 
+def post_delete(request, post_id):
+    post = Post.objects.get(id=post_id)
+    if request.method == "POST":   
+        post.delete()
+        return redirect('post-list')
+    else:
+        return render(request, 'posts/post_confirm_delete.html', {'post':post})
+    
+def index(request):
+    return redirect('post-list')
