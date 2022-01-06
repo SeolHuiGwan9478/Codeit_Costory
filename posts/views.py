@@ -13,6 +13,7 @@ def post_detail(request, post_id):
     context = {"post":post}
     return render(request, 'posts/post_detail.html', context=context)
 
+
 def post_create(request):
     if request.method == 'POST':
         post_form = PostForm(request.POST)
