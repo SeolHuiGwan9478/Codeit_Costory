@@ -31,19 +31,19 @@
             {% endfor %}
         </div>
         <div class="paginator">
-        {% if page.has_previous %}
-        <a href="?page=1" class="first">first</a>
-        <a href="?page={{ page.previous_page_number }}" class="prev">prev</a>
-        {% endif %}
+            {% if page.has_previous %}
+                <a href="?page=1" class="first">first</a>
+                <a href="?page={{ page.previous_page_number }}" class="prev">prev</a>
+            {% endif %}
 
-        <span>
-            <p>{{page.number}} of {{page.paginator.num_pages}}</p>
-        </span>
+            <span>
+                <p>{{page.number}} of {{page.paginator.num_pages}}</p>
+            </span>
 
-        {% if page.has_next %}
-            <a href="?page={{ page.next_page_number }}" class="next">next</a>
-            <a href="?page={{ page.paginator.num_pages }}" class="last">last</a>
-        {% endif %}
+            {% if page.has_next %}
+                <a href="?page={{ page.next_page_number }}" class="next">next</a>
+                <a href="?page={{ page.paginator.num_pages }}" class="last">last</a>
+            {% endif %}
         </div>
     {% else %}
         <div class="blank">
