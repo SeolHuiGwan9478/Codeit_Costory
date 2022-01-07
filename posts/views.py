@@ -3,7 +3,10 @@ from django.http import Http404
 from .models import Post
 from .forms import PostForm
 from django.core.paginator import Paginator
-from django.views import View
+from django.views.generic import CreateView
+from django.urls import reverse
+#from django.views import View
+
 # Create your views here.
 def post_list(request):
     posts = Post.objects.all()
@@ -19,18 +22,13 @@ def post_detail(request, post_id):
     context = {"post":post}
     return render(request, 'posts/post_detail.html', context=context)
 
-class PostCreateView(View):
-    # method GET
-    def get(self, request):
-        post_form = PostForm()
-        return render(request, 'posts/post_form.html', {'form': post_form})
+class PostCreateView(CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'posts/post_list.html'
 
-    def post(self, request):
-        post_form = PostForm(reqeust.POST)
-        if post_form.is_valid():
-            new_post = post_form.save()
-            return redirect('post-detail', post_id = new_post.id)
-        return render(request, 'posts/post_form.html', {'form':post_form})
+    def get_success_url(self):
+        return reverse('post-detail', kwargs={'post_id':self.object.id})
 
 def post_update(request, post_id):
     post = get_object_or_404(Post, id=post_id)
