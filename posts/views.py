@@ -3,24 +3,22 @@ from django.http import Http404
 from .models import Post
 from .forms import PostForm
 from django.core.paginator import Paginator
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView, DetailView
 from django.urls import reverse
 #from django.views import View
+class PostListView(ListView):
+    model = Post
+    template_name = 'posts/post_list.html'
+    context_object_name = 'posts'
+    ordering = ['-dt_created']
+    paginate_by = 6
+    page_kwarg = 'page'
 
-# Create your views here.
-def post_list(request):
-    posts = Post.objects.all()
-    paginator = Paginator(posts, 6)
-    curr_page_number = request.GET.get('page')
-    if curr_page_number is None:
-        curr_page_number = 1
-    page = paginator.page(curr_page_number)
-    return render(request, 'posts/post_list.html', {'page':page})
-
-def post_detail(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
-    context = {"post":post}
-    return render(request, 'posts/post_detail.html', context=context)
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'posts/post_detail.html'
+    context_object_name = 'post'
+    pk_url_kwarg = 'post_id'    
 
 class PostCreateView(CreateView):
     model = Post
